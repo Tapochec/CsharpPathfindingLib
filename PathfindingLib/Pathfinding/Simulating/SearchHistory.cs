@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PathfindingLib.Pathfinding.Simulating
 {
@@ -10,7 +7,7 @@ namespace PathfindingLib.Pathfinding.Simulating
     {
         public readonly Position Start;
         public readonly Position Goal;
-        public readonly List<Position> NotAvailable; // Стены
+        public readonly List<Position> NotAvailable;
         public readonly List<StepHistoryItem> Steps;
         public readonly List<Position> Path;
 

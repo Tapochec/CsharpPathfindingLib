@@ -1,30 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PathfindingLib.Pathfinding.Simulating
 {
     public class StepHistoryItem
     {
         public readonly Tuple<Position, string> Active;
-        public readonly List<Tuple<Position, string>> Visited;
+        public readonly Dictionary<Tuple<Position, string>, Position> CameFrom;
         public readonly List<Tuple<Position, string>> Frontier;
         
 
-        public StepHistoryItem(Node active, List<Node> visited, Queue<Node> frontier)
+        public StepHistoryItem(Node active, Dictionary<Node, Node> cameFrom, Queue<Node> frontier)
         {
             Active = new Tuple<Position, string>(active.Pos, active.Value);
 
-            Visited = new List<Tuple<Position, string>>();
-            foreach (Node node in visited)
+            CameFrom = new Dictionary<Tuple<Position, string>, Position>();
+            foreach (KeyValuePair<Node, Node> pair in cameFrom)
             {
-                Position newPos = new Position(node.Pos.X, node.Pos.Y);
-                if (node.Prev != null)
-                    newPos = new Position(node.Pos, node.Prev.Pos);
+                Tuple<Position, string> nodePos = new Tuple<Position, string>(pair.Key.Pos, pair.Key.Value);
 
-                Visited.Add(new Tuple<Position, string>(newPos, node.Value));
+                Position prevNodePos = Position.NaN;
+                if (pair.Value != null)
+                    prevNodePos = pair.Value.Pos;
+
+                CameFrom.Add(nodePos, prevNodePos);
             }
 
             Frontier = new List<Tuple<Position, string>>();

@@ -6,7 +6,6 @@
 
         public string Value = "0";
         public NodeType Type = NodeType.NotVisited;
-        public Node Prev;
 
         public Node(int x, int y)
         {

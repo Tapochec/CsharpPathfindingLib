@@ -2,7 +2,9 @@
 
 namespace PathfindingLib.Pathfinding
 {
-    public class NodeGrid
+
+    // Represents a directed weighted graph
+    public class SquareGrid
     {
         public int Width;
         public int Heigth;
@@ -83,9 +85,9 @@ namespace PathfindingLib.Pathfinding
             return neighbors;
         }
 
-        public static NodeGrid CreateNodeGrid(int width = 10, int height = 10)
+        public static SquareGrid Create(int width = 10, int height = 10)
         {
-            NodeGrid grid = new NodeGrid
+            SquareGrid grid = new SquareGrid
             {
                 Width = width,
                 Heigth = height,
@@ -102,10 +104,10 @@ namespace PathfindingLib.Pathfinding
             return grid;
         }
 
-        public void Clear()
-        {
-            Nodes.ForEach(n => { n.Value = "0"; n.Type = NodeType.NotVisited; });
-            Walls.Clear();
-        }
+        //public void Clear()
+        //{
+        //    Nodes.ForEach(n => { n.Value = "0"; n.Type = NodeType.NotVisited; });
+        //    Walls.Clear();
+        //}
     }
 }
