@@ -4,6 +4,7 @@
     {
         NotVisited,
         Visited,
+        Forest,       // Movement cost incresed #8bad85
         NotAvailable, // Impassable (wall)
         Frontier,
         Active,

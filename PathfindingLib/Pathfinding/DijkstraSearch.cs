@@ -1,11 +1,14 @@
-﻿using PathfindingLib.Pathfinding.Simulating;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using PathfindingLib.Pathfinding.Simulating;
+using Priority_Queue;
 
 namespace PathfindingLib.Pathfinding
 {
-    // Represents the Breadth First Search algorithm
-    public static class BreadthFirstSearch
+    // Represents Dijkstra searching algorithm
+    public static class DijkstraSearch
     {
 
         // Finds the shortest path from "start" to "goal"
@@ -13,11 +16,14 @@ namespace PathfindingLib.Pathfinding
         public static SearchHistory SearchWithHistory(SquareGrid grid, Node start, Node goal)
         {
             List<StepHistoryItem> steps = new List<StepHistoryItem>();
-            Queue<Node> frontier = new Queue<Node>();
-            Dictionary<Node, Node>  cameFrom = new Dictionary<Node, Node>();
+            SimplePriorityQueue<Node, double> frontier = new SimplePriorityQueue<Node, double>();
+            Dictionary<Node, Node> cameFrom = new Dictionary<Node, Node>();
+            Dictionary<Node, double> costSoFar = new Dictionary<Node, double>();
 
-            frontier.Enqueue(start);
+            //frontier.Enqueue(start);
+            frontier.Enqueue(start, 0);
             cameFrom.Add(start, null);
+            costSoFar.Add(start, 0);
 
             int counter = 0;
             bool success = false;
@@ -25,7 +31,7 @@ namespace PathfindingLib.Pathfinding
             while (frontier.Count != 0)
             {
                 Node current = frontier.Dequeue();
-                current.Value = counter.ToString();
+                //current.Value = counter.ToString();
 
                 if (current == goal)
                 {
@@ -35,24 +41,26 @@ namespace PathfindingLib.Pathfinding
 
                 foreach (Node next in grid.GetNeighbors(current))
                 {
-                    if (!cameFrom.ContainsKey(next))
+                    double newCost = costSoFar[current] + next.Cost;
+                    if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
                     {
-                        next.Value = (counter + frontier.Count + 1).ToString();
+                        costSoFar[next] = newCost;
+                        frontier.Enqueue(next, newCost);
+                        cameFrom.Add(next, current);
+
+                        next.Value = newCost.ToString();//(counter + frontier.Count + 1).ToString();
                         if (next.Type != NodeType.Forest)
                             next.Type = NodeType.Visited;
-
-                        frontier.Enqueue(next);
-                        cameFrom.Add(next, current);
                     }
                 }
                 counter++;
 
                 // Adding info about current step
-                StepHistoryItem step = new StepHistoryItem(current, cameFrom, frontier.ToList());
+                StepHistoryItem step = new StepHistoryItem(current, cameFrom, frontier.Select(n => n).ToList());
                 steps.Add(step);
             }
 
-            StepHistoryItem lastStep = new StepHistoryItem(goal, cameFrom, frontier.ToList());
+            StepHistoryItem lastStep = new StepHistoryItem(goal, cameFrom, frontier.Select(n => n).ToList());
             steps.Add(lastStep);
 
             // Our shortest path

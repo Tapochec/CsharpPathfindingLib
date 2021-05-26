@@ -104,6 +104,34 @@ namespace PathfindingLib.Pathfinding
             return grid;
         }
 
+        public static SquareGrid CreateWithForest(int width = 10, int height = 10)
+        {
+            SquareGrid grid = new SquareGrid
+            {
+                Width = width,
+                Heigth = height,
+            };
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    grid.Nodes.Add(new Node(x, y));
+                }
+            }
+
+            for (int x = 3; x < 7; x++)
+            {
+                for (int y = 3; y < 7; y++)
+                {
+                    grid[x, y].Type = NodeType.Forest;
+                    grid[x, y].Cost = 5;
+                }
+            }
+
+            return grid;
+        }
+
         //public void Clear()
         //{
         //    Nodes.ForEach(n => { n.Value = "0"; n.Type = NodeType.NotVisited; });
