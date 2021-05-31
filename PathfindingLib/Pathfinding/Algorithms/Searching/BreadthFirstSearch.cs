@@ -1,16 +1,21 @@
 ﻿using PathfindingLib.Pathfinding.Simulating;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PathfindingLib.Pathfinding
+namespace PathfindingLib.Pathfinding.Algorithms.Searching
 {
-    // Represents the Breadth First Search algorithm
-    public static class BreadthFirstSearch
+    // Represents Breadth First Search algorithm
+    public sealed class BreadthFirstSearch : ISearchingAlg
     {
+        public string AlgorithmName => "Breadth first search algorithm";
 
-        // Finds the shortest path from "start" to "goal"
-        // Returns detailed info about founded path (use this method for visualization of the algorithm)
-        public static SearchHistory SearchWithHistory(SquareGrid grid, Node start, Node goal)
+        public List<Position> Search(SquareGrid grid, Node start, Node goal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public SearchHistory SearchWithHistory(SquareGrid grid, Node start, Node goal)
         {
             List<StepHistoryItem> steps = new List<StepHistoryItem>();
             Queue<Node> frontier = new Queue<Node>();

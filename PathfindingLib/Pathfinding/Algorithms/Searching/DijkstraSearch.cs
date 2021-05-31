@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using PathfindingLib.Pathfinding.Simulating;
 using Priority_Queue;
 
-namespace PathfindingLib.Pathfinding
+namespace PathfindingLib.Pathfinding.Algorithms.Searching
 {
     // Represents Dijkstra searching algorithm
-    public static class DijkstraSearch
+    public sealed class DijkstraSearch : ISearchingAlg
     {
+        public string AlgorithmName => "Dijkstra algorithm";
 
-        // Finds the shortest path from "start" to "goal"
-        // Returns detailed info about founded path (use this method for visualization of the algorithm)
-        public static SearchHistory SearchWithHistory(SquareGrid grid, Node start, Node goal)
+        public List<Position> Search(SquareGrid grid, Node start, Node goal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public SearchHistory SearchWithHistory(SquareGrid grid, Node start, Node goal)
         {
             List<StepHistoryItem> steps = new List<StepHistoryItem>();
             SimplePriorityQueue<Node, double> frontier = new SimplePriorityQueue<Node, double>();
