@@ -6,12 +6,31 @@ namespace PathfindingLib.Pathfinding
     // Represents a directed weighted graph
     public class SquareGrid
     {
-        public int Width;
-        public int Heigth;
+        public int Width { get; private set; }
+        public int Heigth { get; private set; }
+        public List<Node> Nodes { get; private set; } = new List<Node>();
+        public List<Node> Walls { get; private set; } = new List<Node>();
+        public bool GetNeighborsAllowDiagnalNodes
+        {
+            set
+            {
+                if (value)
+                    GetNeighbors = GetEightNeighbors;
+                else
+                    GetNeighbors = GetFourNeighbors;
+            }
+        }
 
-        public List<Node> Nodes = new List<Node>();
-        public List<Node> Walls = new List<Node>();
+        public delegate List<Node> GetNeighborsDelegate(Node node);
+        public GetNeighborsDelegate GetNeighbors { get; private set; }
 
+        public SquareGrid(int width, int heigth, bool allowDiagnalNodesForGetNeighborsMethod)
+        {
+            Width = width;
+            Heigth = heigth;
+            GetNeighborsAllowDiagnalNodes = allowDiagnalNodesForGetNeighborsMethod;
+        }
+        
         public Node this[int x, int y]
         {
             get { return Nodes.Find(n => (n.Pos.X == x) && (n.Pos.Y == y)); }
@@ -43,40 +62,26 @@ namespace PathfindingLib.Pathfinding
             Walls.Clear();
         }
 
-        public List<Node> GetNeighbors(Node node)
+        public List<Node> GetFourNeighbors(Node node)
         {
             int x = node.Pos.X;
             int y = node.Pos.Y;
             List<Node> neighbors = new List<Node>();
 
-            if (GlobalSettings.EightWay)
+            // Смена хода часовой стрелки в зависимости от чётности стрелки
+            if ((x + y) % 2 == 0)
             {
                 neighbors.Add(this[x, y - 1]); // up
                 neighbors.Add(this[x - 1, y]); // left
                 neighbors.Add(this[x, y + 1]); // down
                 neighbors.Add(this[x + 1, y]); // right
-                neighbors.Add(this[x + 1, y - 1]); // up right
-                neighbors.Add(this[x - 1, y - 1]); // up left
-                neighbors.Add(this[x - 1, y + 1]); // down left
-                neighbors.Add(this[x + 1, y + 1]); // down right
             }
             else
             {
-                // Смена хода часовой стрелки в зависимости от чётности стрелки
-                if ((x + y) % 2 == 0)
-                {
-                    neighbors.Add(this[x, y - 1]); // up
-                    neighbors.Add(this[x - 1, y]); // left
-                    neighbors.Add(this[x, y + 1]); // down
-                    neighbors.Add(this[x + 1, y]); // right
-                }
-                else
-                {
-                    neighbors.Add(this[x + 1, y]); // right
-                    neighbors.Add(this[x, y + 1]); // down
-                    neighbors.Add(this[x - 1, y]); // left
-                    neighbors.Add(this[x, y - 1]); // up
-                }
+                neighbors.Add(this[x + 1, y]); // right
+                neighbors.Add(this[x, y + 1]); // down
+                neighbors.Add(this[x - 1, y]); // left
+                neighbors.Add(this[x, y - 1]); // up
             }
 
             neighbors.RemoveAll(n => n == null);
@@ -85,13 +90,30 @@ namespace PathfindingLib.Pathfinding
             return neighbors;
         }
 
-        public static SquareGrid Create(int width = 10, int height = 10)
+        public List<Node> GetEightNeighbors(Node node)
         {
-            SquareGrid grid = new SquareGrid
-            {
-                Width = width,
-                Heigth = height,
-            };
+            int x = node.Pos.X;
+            int y = node.Pos.Y;
+            List<Node> neighbors = new List<Node>();
+
+            neighbors.Add(this[x, y - 1]); // up
+            neighbors.Add(this[x - 1, y]); // left
+            neighbors.Add(this[x, y + 1]); // down
+            neighbors.Add(this[x + 1, y]); // right
+            neighbors.Add(this[x + 1, y - 1]); // up right
+            neighbors.Add(this[x - 1, y - 1]); // up left
+            neighbors.Add(this[x - 1, y + 1]); // down left
+            neighbors.Add(this[x + 1, y + 1]); // down right
+            
+            neighbors.RemoveAll(n => n == null);
+            neighbors.RemoveAll(n => n.Type == NodeType.NotAvailable); // Исключаем стены
+
+            return neighbors;
+        }
+
+        public static SquareGrid Create(int width, int height, bool allowDiagnalNodesForGetNeighborsMethod)
+        {
+            SquareGrid grid = new SquareGrid(width, height, allowDiagnalNodesForGetNeighborsMethod);
 
             for (int x = 0; x < width; x++)
             {
@@ -104,13 +126,9 @@ namespace PathfindingLib.Pathfinding
             return grid;
         }
 
-        public static SquareGrid CreateWithForest(int width = 10, int height = 10)
+        public static SquareGrid CreateWithForest(int width, int height, bool allowDiagnalNodesForGetNeighborsMethod)
         {
-            SquareGrid grid = new SquareGrid
-            {
-                Width = width,
-                Heigth = height,
-            };
+            SquareGrid grid = new SquareGrid(width, height, allowDiagnalNodesForGetNeighborsMethod);
 
             for (int x = 0; x < width; x++)
             {
