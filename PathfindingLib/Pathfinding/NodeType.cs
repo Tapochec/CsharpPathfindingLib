@@ -8,8 +8,8 @@
         NotAvailable, // Impassable (wall)
         Frontier,
         Active,
-        Start,
-        Goal
+        //Start,
+        //Goal
         //Neibghor,
     }
 }

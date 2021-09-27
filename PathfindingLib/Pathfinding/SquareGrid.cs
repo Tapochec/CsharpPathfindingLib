@@ -10,6 +10,7 @@ namespace PathfindingLib.Pathfinding
         public int Heigth { get; private set; }
         public List<Node> Nodes { get; private set; } = new List<Node>();
         public List<Node> Walls { get; private set; } = new List<Node>();
+        public List<Node> Forest { get; private set; } = new List<Node>();
         public bool GetNeighborsAllowDiagnalNodes
         {
             set
@@ -144,6 +145,7 @@ namespace PathfindingLib.Pathfinding
                 {
                     grid[x, y].Type = NodeType.Forest;
                     grid[x, y].Cost = 5;
+                    grid.Forest.Add(grid[x, y]);
                 }
             }
 

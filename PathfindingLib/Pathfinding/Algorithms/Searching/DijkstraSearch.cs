@@ -75,7 +75,7 @@ namespace PathfindingLib.Pathfinding.Algorithms.Searching
                     path.Add(cameFrom[path.Last()]);
             }
 
-            SearchHistory history = new SearchHistory(start, goal, grid.Walls, steps, path);
+            SearchHistory history = new SearchHistory(start, goal, grid.Walls, grid.Forest, steps, path);
             return history;
         }
     }
