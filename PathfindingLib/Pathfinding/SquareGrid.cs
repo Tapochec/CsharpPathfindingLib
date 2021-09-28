@@ -41,7 +41,7 @@ namespace PathfindingLib.Pathfinding
         {
             Node node = this[x, y];
 
-            node.Type = NodeType.NotAvailable;
+            node.Type = NodeType.Wall;
             node.Value = "";
             Walls.Add(node);
         }
@@ -86,7 +86,7 @@ namespace PathfindingLib.Pathfinding
             }
 
             neighbors.RemoveAll(n => n == null);
-            neighbors.RemoveAll(n => n.Type == NodeType.NotAvailable); // Исключаем стены
+            neighbors.RemoveAll(n => n.Type == NodeType.Wall); // Исключаем стены
 
             return neighbors;
         }
@@ -97,17 +97,48 @@ namespace PathfindingLib.Pathfinding
             int y = node.Pos.Y;
             List<Node> neighbors = new List<Node>();
 
-            neighbors.Add(this[x, y - 1]); // up
-            neighbors.Add(this[x - 1, y]); // left
-            neighbors.Add(this[x, y + 1]); // down
-            neighbors.Add(this[x + 1, y]); // right
-            neighbors.Add(this[x + 1, y - 1]); // up right
-            neighbors.Add(this[x - 1, y - 1]); // up left
-            neighbors.Add(this[x - 1, y + 1]); // down left
-            neighbors.Add(this[x + 1, y + 1]); // down right
+            Node up = (this[x, y - 1]);
+            Node left = (this[x - 1, y]);
+            Node down = (this[x, y + 1]);
+            Node right = (this[x + 1, y]);
             
+            Node upRight = (this[x + 1, y - 1]);
+            Node upLeft = (this[x - 1, y - 1]);
+            Node downLeft = (this[x - 1, y + 1]);
+            Node downRight = (this[x + 1, y + 1]);
+            neighbors.AddRange(new List<Node>() { up, left, down, right, upRight, upLeft, downLeft, downRight });
+
+            if (left != null && up != null)
+            {
+                if (left.Type == NodeType.Wall && up.Type == NodeType.Wall)
+                {
+                    neighbors.Remove(upLeft);
+                }
+            }
+            if (up != null && right != null)
+            {
+                if (up.Type == NodeType.Wall && right.Type == NodeType.Wall)
+                {
+                    neighbors.Remove(upRight);
+                }
+            }
+            if (right != null && down != null)
+            {
+                if (right.Type == NodeType.Wall && down.Type == NodeType.Wall)
+                {
+                    neighbors.Remove(downRight);
+                }
+            }
+            if (down != null && left != null)
+            {
+                if (down.Type == NodeType.Wall && left.Type == NodeType.Wall)
+                {
+                    neighbors.Remove(downLeft);
+                }
+            }
+
             neighbors.RemoveAll(n => n == null);
-            neighbors.RemoveAll(n => n.Type == NodeType.NotAvailable); // Исключаем стены
+            neighbors.RemoveAll(n => n.Type == NodeType.Wall); // except walls
 
             return neighbors;
         }
