@@ -4,8 +4,8 @@
     {
         NotVisited,
         Visited,
-        Forest,       // Movement cost incresed #8bad85
-        Wall, // Impassable (wall)
+        Forest,       // Movement cost incresed
+        Wall,         // Impassable
         Frontier,
         Active,
         //Start,

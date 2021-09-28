@@ -57,6 +57,27 @@ namespace PathfindingLib.Pathfinding
             }
         }
 
+        public void AddForest(int x, int y)
+        {
+            Node node = this[x, y];
+
+            node.Type = NodeType.Forest;
+            node.Cost = 5;
+            Forest.Add(node);
+        }
+
+        public void RemoveForest(int x, int y)
+        {
+            Node node = Forest.Find(n => (n.Pos.X == x) && (n.Pos.Y == y));
+
+            if (node != null)
+            {
+                node.Type = NodeType.NotVisited;
+                node.Cost = 1;
+                Forest.Remove(node);
+            }
+        }
+
         public void RemoveAllWalls()
         {
             Walls.ForEach(w => w.Type = NodeType.NotVisited);
@@ -108,6 +129,7 @@ namespace PathfindingLib.Pathfinding
             Node downRight = (this[x + 1, y + 1]);
             neighbors.AddRange(new List<Node>() { up, left, down, right, upRight, upLeft, downLeft, downRight });
 
+            // excepting diagonal nodes between walls
             if (left != null && up != null)
             {
                 if (left.Type == NodeType.Wall && up.Type == NodeType.Wall)
