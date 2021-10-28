@@ -7,7 +7,7 @@ using Priority_Queue;
 namespace PathfindingLib.Pathfinding.Algorithms.Searching
 {
     // Represents Dijkstra searching algorithm
-    public sealed class DijkstraSearch : ISearchingAlg
+    public sealed class DijkstraSearch : ISearchingAlgorithm
     {
         public string AlgorithmName => "Dijkstra algorithm";
 
@@ -75,7 +75,7 @@ namespace PathfindingLib.Pathfinding.Algorithms.Searching
                     path.Add(cameFrom[path.Last()]);
             }
 
-            SearchHistory history = new SearchHistory(start, goal, grid.Walls, grid.Forest, steps, path);
+            SearchHistory history = new SearchHistory(start, goal, grid.Walls, grid.Forests, steps, path);
             return history;
         }
     }

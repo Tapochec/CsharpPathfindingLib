@@ -6,7 +6,7 @@ namespace PathfindingLib.Pathfinding.Algorithms.Searching
     /// <summary>
     /// Interface for realizing searching algorithms
     /// </summary>
-    public interface ISearchingAlg
+    public interface ISearchingAlgorithm
     {
         string AlgorithmName { get; }
 

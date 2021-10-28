@@ -6,7 +6,7 @@ using System.Linq;
 namespace PathfindingLib.Pathfinding.Algorithms.Searching
 {
     // Represents Breadth First Search algorithm
-    public sealed class BreadthFirstSearch : ISearchingAlg
+    public sealed class BreadthFirstSearch : ISearchingAlgorithm
     {
         public string AlgorithmName => "Breadth first search algorithm";
 
@@ -69,7 +69,7 @@ namespace PathfindingLib.Pathfinding.Algorithms.Searching
                     path.Add(cameFrom[path.Last()]);
             }
 
-            SearchHistory history = new SearchHistory(start, goal, grid.Walls, grid.Forest, steps, path);
+            SearchHistory history = new SearchHistory(start, goal, grid.Walls, grid.Forests, steps, path);
             return history;
         }
     }

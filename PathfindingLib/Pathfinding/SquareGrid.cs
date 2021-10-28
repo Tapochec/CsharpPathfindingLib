@@ -10,7 +10,7 @@ namespace PathfindingLib.Pathfinding
         public int Heigth { get; private set; }
         public List<Node> Nodes { get; private set; } = new List<Node>();
         public List<Node> Walls { get; private set; } = new List<Node>();
-        public List<Node> Forest { get; private set; } = new List<Node>();
+        public List<Node> Forests { get; private set; } = new List<Node>();
         public bool GetNeighborsAllowDiagnalNodes
         {
             set
@@ -63,18 +63,18 @@ namespace PathfindingLib.Pathfinding
 
             node.Type = NodeType.Forest;
             node.Cost = 5;
-            Forest.Add(node);
+            Forests.Add(node);
         }
 
         public void RemoveForest(int x, int y)
         {
-            Node node = Forest.Find(n => (n.Pos.X == x) && (n.Pos.Y == y));
+            Node node = Forests.Find(n => (n.Pos.X == x) && (n.Pos.Y == y));
 
             if (node != null)
             {
                 node.Type = NodeType.NotVisited;
                 node.Cost = 1;
-                Forest.Remove(node);
+                Forests.Remove(node);
             }
         }
 
@@ -84,7 +84,18 @@ namespace PathfindingLib.Pathfinding
             Walls.Clear();
         }
 
-        public List<Node> GetFourNeighbors(Node node)
+        public void RemoveAllForests()
+        {
+            foreach (Node f in Forests)
+            {
+                f.Type = NodeType.NotVisited;
+                f.Cost = 1;
+            }
+
+            Forests.Clear();
+        }
+
+        private List<Node> GetFourNeighbors(Node node)
         {
             int x = node.Pos.X;
             int y = node.Pos.Y;
@@ -112,7 +123,7 @@ namespace PathfindingLib.Pathfinding
             return neighbors;
         }
 
-        public List<Node> GetEightNeighbors(Node node)
+        private List<Node> GetEightNeighbors(Node node)
         {
             int x = node.Pos.X;
             int y = node.Pos.Y;
@@ -198,7 +209,7 @@ namespace PathfindingLib.Pathfinding
                 {
                     grid[x, y].Type = NodeType.Forest;
                     grid[x, y].Cost = 5;
-                    grid.Forest.Add(grid[x, y]);
+                    grid.Forests.Add(grid[x, y]);
                 }
             }
 
