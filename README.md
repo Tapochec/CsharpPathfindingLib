@@ -1,2 +1,2 @@
-# csharp-pathfinding-dll
+# CsharpPathfindingLib
 csharp library for pathfinding in square grid
