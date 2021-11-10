@@ -4,7 +4,7 @@ namespace PathfindingLib.Pathfinding
 {
 
     // Represents a directed weighted graph
-    public class SquareGrid
+    public class SquareGraph
     {
         public int Width { get; private set; }
         public int Heigth { get; private set; }
@@ -25,7 +25,7 @@ namespace PathfindingLib.Pathfinding
         public delegate List<Node> GetNeighborsDelegate(Node node);
         public GetNeighborsDelegate GetNeighbors { get; private set; }
 
-        public SquareGrid(int width, int heigth, bool allowDiagnalNodesForGetNeighborsMethod)
+        public SquareGraph(int width, int heigth, bool allowDiagnalNodesForGetNeighborsMethod)
         {
             Width = width;
             Heigth = heigth;
@@ -176,9 +176,9 @@ namespace PathfindingLib.Pathfinding
             return neighbors;
         }
 
-        public static SquareGrid Create(int width, int height, bool allowDiagnalNodesForGetNeighborsMethod)
+        public static SquareGraph Create(int width, int height, bool allowDiagnalNodesForGetNeighborsMethod)
         {
-            SquareGrid grid = new SquareGrid(width, height, allowDiagnalNodesForGetNeighborsMethod);
+            SquareGraph grid = new SquareGraph(width, height, allowDiagnalNodesForGetNeighborsMethod);
 
             for (int x = 0; x < width; x++)
             {
@@ -191,9 +191,9 @@ namespace PathfindingLib.Pathfinding
             return grid;
         }
 
-        public static SquareGrid CreateWithForest(int width, int height, bool allowDiagnalNodesForGetNeighborsMethod)
+        public static SquareGraph CreateWithForest(int width, int height, bool allowDiagnalNodesForGetNeighborsMethod)
         {
-            SquareGrid grid = new SquareGrid(width, height, allowDiagnalNodesForGetNeighborsMethod);
+            SquareGraph grid = new SquareGraph(width, height, allowDiagnalNodesForGetNeighborsMethod);
 
             for (int x = 0; x < width; x++)
             {

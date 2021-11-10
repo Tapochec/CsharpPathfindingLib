@@ -4,21 +4,21 @@ using System.Linq;
 using PathfindingLib.Pathfinding.Simulating;
 using Priority_Queue;
 
-namespace PathfindingLib.Pathfinding.Algorithms.Searching
+namespace PathfindingLib.Pathfinding.Algorithms
 {
     // Represents Dijkstra searching algorithm
-    public sealed class DijkstraSearch : ISearchingAlgorithm
+    public sealed class DijkstraSearch : IPFAlgorithm
     {
         public string AlgorithmName => "Dijkstra algorithm";
 
-        public List<Position> Search(SquareGrid grid, Node start, Node goal)
+        public List<Position> Search(SquareGraph grid, Node start, Node goal)
         {
             throw new NotImplementedException();
         }
 
-        public SearchHistory SearchWithHistory(SquareGrid grid, Node start, Node goal)
+        public PFHistory SearchWithHistory(SquareGraph grid, Node start, Node goal)
         {
-            List<StepHistoryItem> steps = new List<StepHistoryItem>();
+            List<PFHistoryItem> steps = new List<PFHistoryItem>();
             SimplePriorityQueue<Node, double> frontier = new SimplePriorityQueue<Node, double>();
             Dictionary<Node, Node> cameFrom = new Dictionary<Node, Node>();
             Dictionary<Node, double> costSoFar = new Dictionary<Node, double>();
@@ -59,11 +59,11 @@ namespace PathfindingLib.Pathfinding.Algorithms.Searching
                 counter++;
 
                 // Adding info about current step
-                StepHistoryItem step = new StepHistoryItem(current, cameFrom, frontier.Select(n => n).ToList());
+                PFHistoryItem step = new PFHistoryItem(current, cameFrom, frontier.Select(n => n).ToList());
                 steps.Add(step);
             }
 
-            StepHistoryItem lastStep = new StepHistoryItem(goal, cameFrom, frontier.Select(n => n).ToList());
+            PFHistoryItem lastStep = new PFHistoryItem(goal, cameFrom, frontier.Select(n => n).ToList());
             steps.Add(lastStep);
 
             // Our shortest path
@@ -75,7 +75,7 @@ namespace PathfindingLib.Pathfinding.Algorithms.Searching
                     path.Add(cameFrom[path.Last()]);
             }
 
-            SearchHistory history = new SearchHistory(start, goal, grid.Walls, grid.Forests, steps, path);
+            PFHistory history = new PFHistory(start, goal, grid.Walls, grid.Forests, steps, path);
             return history;
         }
     }

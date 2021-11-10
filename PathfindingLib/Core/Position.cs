@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PathfindingLib.Pathfinding
+namespace PathfindingLib.Core
 {
     public struct Position : IEquatable<Position>
     {

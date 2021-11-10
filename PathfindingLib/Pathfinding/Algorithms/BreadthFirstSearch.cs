@@ -3,21 +3,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PathfindingLib.Pathfinding.Algorithms.Searching
+namespace PathfindingLib.Pathfinding.Algorithms
 {
     // Represents Breadth First Search algorithm
-    public sealed class BreadthFirstSearch : ISearchingAlgorithm
+    public sealed class BreadthFirstSearch : IPFAlgorithm
     {
         public string AlgorithmName => "Breadth first search algorithm";
 
-        public List<Position> Search(SquareGrid grid, Node start, Node goal)
+        public List<Position> Search(SquareGraph grid, Node start, Node goal)
         {
             throw new NotImplementedException();
         }
 
-        public SearchHistory SearchWithHistory(SquareGrid grid, Node start, Node goal)
+        public PFHistory SearchWithHistory(SquareGraph grid, Node start, Node goal)
         {
-            List<StepHistoryItem> steps = new List<StepHistoryItem>();
+            List<PFHistoryItem> steps = new List<PFHistoryItem>();
             Queue<Node> frontier = new Queue<Node>();
             Dictionary<Node, Node>  cameFrom = new Dictionary<Node, Node>();
 
@@ -53,11 +53,11 @@ namespace PathfindingLib.Pathfinding.Algorithms.Searching
                 counter++;
 
                 // Adding info about current step
-                StepHistoryItem step = new StepHistoryItem(current, cameFrom, frontier.ToList());
+                PFHistoryItem step = new PFHistoryItem(current, cameFrom, frontier.ToList());
                 steps.Add(step);
             }
 
-            StepHistoryItem lastStep = new StepHistoryItem(goal, cameFrom, frontier.ToList());
+            PFHistoryItem lastStep = new PFHistoryItem(goal, cameFrom, frontier.ToList());
             steps.Add(lastStep);
 
             // Our shortest path
@@ -69,7 +69,7 @@ namespace PathfindingLib.Pathfinding.Algorithms.Searching
                     path.Add(cameFrom[path.Last()]);
             }
 
-            SearchHistory history = new SearchHistory(start, goal, grid.Walls, grid.Forests, steps, path);
+            PFHistory history = new PFHistory(start, goal, grid.Walls, grid.Forests, steps, path);
             return history;
         }
     }
