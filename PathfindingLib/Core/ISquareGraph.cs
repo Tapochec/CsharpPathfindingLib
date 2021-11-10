@@ -6,6 +6,7 @@ namespace PathfindingLib.Core
     {
         IReadOnlyList<TNode> Nodes { get; }
         TNode this[int x, int y] { get; }
+        IEnumerable<TNode> GetNeighbors(TNode node);
         IReadOnlyList<TNode> GetAllNodesOfCertainType(string typeName);
         //void AddLeft(ISquareGraph<TNode> graph);
         //void AddRight(ISquareGraph<TNode> graph);

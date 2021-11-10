@@ -18,7 +18,14 @@ namespace PathfindingLib.Core
 
         public IReadOnlyList<INodeType> GetAllNodeTypes(bool includeDefaultType = true)
         {
-            throw new NotImplementedException();
+            if (includeDefaultType)
+            {
+                return _types;
+            }
+            else
+            {
+                return _types.Where(t => t.Name != _defaultTypeName).ToList();
+            }
         }
 
         public INodeType this[string typeName]

@@ -1,4 +1,5 @@
-﻿using PathfindingLib.Pathfinding.Simulating;
+﻿using PathfindingLib.Core;
+using PathfindingLib.Pathfinding.Simulating;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,16 +7,16 @@ using System.Linq;
 namespace PathfindingLib.Pathfinding.Algorithms
 {
     // Represents Breadth First Search algorithm
-    public sealed class BreadthFirstSearch : IPFAlgorithm
+    public sealed class BreadthFirstSearch<TNode> : IPFAlgorithm<TNode> where TNode : INode 
     {
         public string AlgorithmName => "Breadth first search algorithm";
 
-        public List<Position> Search(SquareGraph grid, Node start, Node goal)
+        public List<Position> FindPath(ISquareGraph<TNode> grid, TNode start, TNode goal)
         {
             throw new NotImplementedException();
         }
 
-        public PFHistory SearchWithHistory(SquareGraph grid, Node start, Node goal)
+        public PFHistory FindPathWithHistory(ISquareGraph<TNode> grid, TNode start, TNode goal, INodeTypesManager typesManager)
         {
             List<PFHistoryItem> steps = new List<PFHistoryItem>();
             Queue<Node> frontier = new Queue<Node>();
