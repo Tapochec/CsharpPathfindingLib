@@ -16,6 +16,11 @@ namespace PathfindingLib.Core
             _defaultTypeName = defaultType.Name;
         }
 
+        public INodeType GetDefaultType()
+        {
+            return _types.Find(t => t.Name == _defaultTypeName);
+        }
+
         public IReadOnlyList<INodeType> GetAllNodeTypes(bool includeDefaultType = true)
         {
             if (includeDefaultType)
@@ -45,7 +50,7 @@ namespace PathfindingLib.Core
 
         public void Add(INodeType nodeType)
         {
-            if (_types.First(t => t.Name == nodeType.Name) != null)
+            if (_types.Find(t => t.Name == nodeType.Name) != null)
             {
                 throw new Exception($"Node type with name \"{nodeType.Name}\" already exists.");
             }

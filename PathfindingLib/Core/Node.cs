@@ -8,9 +8,14 @@
         public string Value { get; set; }
         public bool IsPassable => Type.NodeCost != null;
 
-        public Node(int x, int y, INodeType type)
+        public Node()
         {
-            Pos = new Position(x, y);
+            Pos = Position.NaN;
+        }
+
+        public Node(Position pos, INodeType type)
+        {
+            Pos = pos;
             Type = type;
         }
     }

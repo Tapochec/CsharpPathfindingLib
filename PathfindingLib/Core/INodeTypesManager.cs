@@ -6,6 +6,7 @@ namespace PathfindingLib.Core
 {
     public interface INodeTypesManager
     {
+        INodeType GetDefaultType();
         IReadOnlyList<INodeType> GetAllNodeTypes(bool includeDefaultType = true);
         INodeType this[string typeName] { get; }
         void Add(INodeType nodeType);

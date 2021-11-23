@@ -1,27 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PathfindingLib.Core;
 using PathfindingLib.Pathfinding.Simulating;
 using Priority_Queue;
 
 namespace PathfindingLib.Pathfinding.Algorithms
 {
     // Represents Dijkstra searching algorithm
-    public sealed class DijkstraSearch : IPFAlgorithm
+    public sealed class DijkstraSearch : IPFAlgorithm/*<TNode> where TNode : class, INode*/
     {
         public string AlgorithmName => "Dijkstra algorithm";
 
-        public List<Position> Search(SquareGraph grid, Node start, Node goal)
+        public List<Position> FindPath(ISquareGraph graph, INode start, INode goal)
         {
             throw new NotImplementedException();
         }
 
-        public PFHistory SearchWithHistory(SquareGraph grid, Node start, Node goal)
+        public PFHistory FindPathWithHistory(ISquareGraph graph, INode start, INode goal, INodeTypesManager typesManager)
         {
             List<PFHistoryItem> steps = new List<PFHistoryItem>();
-            SimplePriorityQueue<Node, double> frontier = new SimplePriorityQueue<Node, double>();
-            Dictionary<Node, Node> cameFrom = new Dictionary<Node, Node>();
-            Dictionary<Node, double> costSoFar = new Dictionary<Node, double>();
+            SimplePriorityQueue<INode, double> frontier = new SimplePriorityQueue<INode, double>();
+            Dictionary<INode, INode> cameFrom = new Dictionary<INode, INode>();
+            Dictionary<INode, double> costSoFar = new Dictionary<INode, double>();
 
             //frontier.Enqueue(start);
             frontier.Enqueue(start, 0);
@@ -33,7 +34,7 @@ namespace PathfindingLib.Pathfinding.Algorithms
 
             while (frontier.Count != 0)
             {
-                Node current = frontier.Dequeue();
+                INode current = frontier.Dequeue();
                 //current.Value = counter.ToString();
 
                 if (current == goal)
@@ -42,9 +43,9 @@ namespace PathfindingLib.Pathfinding.Algorithms
                     break;
                 }
 
-                foreach (Node next in grid.GetNeighbors(current))
+                foreach (INode next in graph.GetNeighbors(current))
                 {
-                    double newCost = costSoFar[current] + next.Cost;
+                    double newCost = costSoFar[current] + next.Cost.Value;
                     if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
                     {
                         costSoFar[next] = newCost;
@@ -52,30 +53,41 @@ namespace PathfindingLib.Pathfinding.Algorithms
                         cameFrom.Add(next, current);
 
                         next.Value = newCost.ToString();//(counter + frontier.Count + 1).ToString();
-                        if (next.Type != NodeType.Forest)
-                            next.Type = NodeType.Visited;
                     }
                 }
                 counter++;
 
                 // Adding info about current step
-                PFHistoryItem step = new PFHistoryItem(current, cameFrom, frontier.Select(n => n).ToList());
+                PFHistoryItem step = new PFHistoryItem(
+                    current,
+                    cameFrom as Dictionary<INode, INode>,
+                    frontier.ToList() as List<INode>);
+
                 steps.Add(step);
             }
 
-            PFHistoryItem lastStep = new PFHistoryItem(goal, cameFrom, frontier.Select(n => n).ToList());
+            PFHistoryItem lastStep = new PFHistoryItem(
+                goal,
+                cameFrom as Dictionary<INode, INode>,
+                frontier.ToList() as List<INode>);
+
             steps.Add(lastStep);
 
             // Our shortest path
-            List<Node> path = null;
+            List<INode> path = new List<INode>();
             if (success)
             {
-                path = new List<Node> { goal };
+                path.Add(goal);
                 while (path.Last() != start)
                     path.Add(cameFrom[path.Last()]);
             }
 
-            PFHistory history = new PFHistory(start, goal, grid.Walls, grid.Forests, steps, path);
+            Dictionary<INodeType, List<INode>> staticNodes = new Dictionary<INodeType, List<INode>>();
+            foreach (INodeType nodeType in typesManager.GetAllNodeTypes(false))
+            {
+                staticNodes.Add(nodeType, graph.GetAllNodesOfCertainType(nodeType.Name) as List<INode>);
+            }
+            PFHistory history = new PFHistory(start, goal, steps, staticNodes, path as List<INode>);
             return history;
         }
     }

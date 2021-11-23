@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace PathfindingLib.Core
 {
 
     // Represents a directed weighted graph
-    public class SquareGraph<TNode> where TNode : INode, new()
+    public class SquareGraph/*<TNode>*/ : ISquareGraph//<TNode> where TNode : INode, new()
     {
         private int _width;
         private int _height;
-        private List<TNode> _nodes;
+        private List<INode> _nodes;
 
         public int Width => _width;
         public int Height => _height;
-        public IReadOnlyList<TNode> Nodes => _nodes;
+        public List<INode> Nodes => _nodes;
         public bool GetNeighborsAllowDiagnalNodes
         {
             set
@@ -24,35 +25,36 @@ namespace PathfindingLib.Core
             }
         }
 
-        public delegate IEnumerable<TNode> GetNeighborsDelegate(TNode node);
+        public delegate IEnumerable<INode> GetNeighborsDelegate(INode node);
         public GetNeighborsDelegate GetNeighbors { get; private set; }
 
-        public SquareGraph(int width, int height, bool allowDiagnalNodesForGetNeighborsMethod, INodeType fillingType)
+        public SquareGraph(int width, int height, bool allowDiagnalNodesForGetNeighborsMethod, INodeType fillingType, INodeFactory nodeFactory)
         {
             _width = width;
             _height = height;
-            _nodes = new List<TNode>();
+            _nodes = new List<INode>();
             GetNeighborsAllowDiagnalNodes = allowDiagnalNodesForGetNeighborsMethod;
 
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
-                    _nodes.Add(new TNode() { Pos = new Position(x, y), Type = fillingType });
+                    //_nodes.Add(new TNode() { Pos = new Position(x, y), Type = fillingType });
+                    _nodes.Add(nodeFactory.CreateNode(new Position(x, y), fillingType));
                 }
             }
         }
         
-        public TNode this[int x, int y]
+        public INode this[int x, int y]
         {
             get { return _nodes.Find(n => (n.Pos.X == x) && (n.Pos.Y == y)); }
         }
 
-        private IEnumerable<TNode> GetFourNeighbors(TNode node)
+        private IEnumerable<INode> GetFourNeighbors(INode node)
         {
             int x = node.Pos.X;
             int y = node.Pos.Y;
-            List<TNode> neighbors = new List<TNode>();
+            List<INode> neighbors = new List<INode>();
 
             // Смена хода часовой стрелки в зависимости от чётности стрелки
             if ((x + y) % 2 == 0)
@@ -76,22 +78,22 @@ namespace PathfindingLib.Core
             return neighbors;
         }
 
-        private IEnumerable<TNode> GetEightNeighbors(TNode node)
+        private IEnumerable<INode> GetEightNeighbors(INode node)
         {
             int x = node.Pos.X;
             int y = node.Pos.Y;
-            List<TNode> neighbors = new List<TNode>();
+            List<INode> neighbors = new List<INode>();
 
-            TNode up = (this[x, y - 1]);
-            TNode left = (this[x - 1, y]);
-            TNode down = (this[x, y + 1]);
-            TNode right = (this[x + 1, y]);
+            INode up = (this[x, y - 1]);
+            INode left = (this[x - 1, y]);
+            INode down = (this[x, y + 1]);
+            INode right = (this[x + 1, y]);
 
-            TNode upRight = (this[x + 1, y - 1]);
-            TNode upLeft = (this[x - 1, y - 1]);
-            TNode downLeft = (this[x - 1, y + 1]);
-            TNode downRight = (this[x + 1, y + 1]);
-            neighbors.AddRange(new List<TNode>() { up, left, down, right, upRight, upLeft, downLeft, downRight });
+            INode upRight = (this[x + 1, y - 1]);
+            INode upLeft = (this[x - 1, y - 1]);
+            INode downLeft = (this[x - 1, y + 1]);
+            INode downRight = (this[x + 1, y + 1]);
+            neighbors.AddRange(new List<INode>() { up, left, down, right, upRight, upLeft, downLeft, downRight });
 
             // excepting diagonal nodes between walls
             if (left != null && up != null)
@@ -127,6 +129,16 @@ namespace PathfindingLib.Core
             neighbors.RemoveAll(n => n.IsPassable == false); // except walls
 
             return neighbors;
+        }
+
+        IEnumerable<INode> ISquareGraph.GetNeighbors(INode node)
+        {
+            return GetNeighbors(node);
+        }
+
+        public List<INode> GetAllNodesOfCertainType(string typeName)
+        {
+            return null;
         }
     }
 }

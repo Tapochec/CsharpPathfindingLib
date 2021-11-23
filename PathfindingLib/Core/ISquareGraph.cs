@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace PathfindingLib.Core
 {
-    public interface ISquareGraph<TNode> where TNode : INode
+    public interface ISquareGraph
     {
-        IReadOnlyList<TNode> Nodes { get; }
-        TNode this[int x, int y] { get; }
-        IEnumerable<TNode> GetNeighbors(TNode node);
-        IReadOnlyList<TNode> GetAllNodesOfCertainType(string typeName);
+        int Width { get; }
+        int Height { get; }
+        List<INode> Nodes { get; }
+        INode this[int x, int y] { get; }
+        IEnumerable<INode> GetNeighbors(INode node);
+        List<INode> GetAllNodesOfCertainType(string typeName);
         //void AddLeft(ISquareGraph<TNode> graph);
         //void AddRight(ISquareGraph<TNode> graph);
         //void AddTop(ISquareGraph<TNode> graph);
