@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace PathfindingLib.Core
 {
@@ -138,7 +139,7 @@ namespace PathfindingLib.Core
 
         public List<INode> GetAllNodesOfCertainType(string typeName)
         {
-            return null;
+            return _nodes.FindAll(n => n.Type.Name == typeName);
         }
     }
 }
