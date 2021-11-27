@@ -67,7 +67,7 @@ namespace PathfindingLib.Pathfinding.Algorithms
 
             steps.Add(lastStep);
 
-            // Our shortest path
+            // shortest path
             List<INode> path = new List<INode>();
             if (success)
             {
@@ -81,7 +81,15 @@ namespace PathfindingLib.Pathfinding.Algorithms
             {
                 staticNodes.Add(nodeType, graph.GetAllNodesOfCertainType(nodeType.Name) as List<INode>);
             }
-            PFHistory history = new PFHistory(start, goal, steps, staticNodes, path as List<INode>);
+
+            PFHistory history = new PFHistory(
+                start,
+                goal,
+                steps,
+                staticNodes,
+                path,
+                graph);
+
             return history;
         }
     }
