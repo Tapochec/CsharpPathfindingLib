@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 
 namespace PathfindingLib.Core
@@ -48,7 +50,24 @@ namespace PathfindingLib.Core
         
         public INode this[int x, int y]
         {
-            get { return _nodes.Find(n => (n.Pos.X == x) && (n.Pos.Y == y)); }
+            //get { return _nodes.Find(n => (n.Pos.X == x) && (n.Pos.Y == y)); }
+            get
+            {
+                if (x < 0)
+                {
+                    return null;
+                }
+
+                try
+                {
+                    INode node = _nodes[y * 10 + x];
+                    return node;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return null;
+                }
+            }
         }
 
         private IEnumerable<INode> GetFourNeighbors(INode node)
