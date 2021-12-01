@@ -70,6 +70,21 @@ namespace PathfindingLib.Core
             }
         }
 
+        public double GetHeuristicCost(INode from, INode to)
+        {
+            return Math.Abs(from.Pos.X - to.Pos.X) + Math.Abs(from.Pos.Y - to.Pos.Y);
+        }
+
+        IEnumerable<INode> ISquareGraph.GetNeighbors(INode node)
+        {
+            return GetNeighbors(node);
+        }
+
+        public List<INode> GetAllNodesOfCertainType(string typeName)
+        {
+            return _nodes.FindAll(n => n.Type.Name == typeName);
+        }
+
         private IEnumerable<INode> GetFourNeighbors(INode node)
         {
             int x = node.Pos.X;
@@ -149,16 +164,6 @@ namespace PathfindingLib.Core
             neighbors.RemoveAll(n => n.IsPassable == false); // except walls
 
             return neighbors;
-        }
-
-        IEnumerable<INode> ISquareGraph.GetNeighbors(INode node)
-        {
-            return GetNeighbors(node);
-        }
-
-        public List<INode> GetAllNodesOfCertainType(string typeName)
-        {
-            return _nodes.FindAll(n => n.Type.Name == typeName);
         }
     }
 }

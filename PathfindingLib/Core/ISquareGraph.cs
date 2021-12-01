@@ -10,6 +10,7 @@ namespace PathfindingLib.Core
         List<INode> Nodes { get; }
         INode this[int x, int y] { get; }
         IEnumerable<INode> GetNeighbors(INode node);
+        double GetHeuristicCost(INode from, INode to);
         List<INode> GetAllNodesOfCertainType(string typeName);
         //void AddLeft(ISquareGraph<TNode> graph);
         //void AddRight(ISquareGraph<TNode> graph);
