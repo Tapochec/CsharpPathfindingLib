@@ -119,15 +119,15 @@ namespace PathfindingLib.Core
             int y = node.Pos.Y;
             List<INode> neighbors = new List<INode>();
 
-            INode up = (this[x, y - 1]);
-            INode left = (this[x - 1, y]);
-            INode down = (this[x, y + 1]);
-            INode right = (this[x + 1, y]);
+            INode up = this[x, y - 1];
+            INode left = this[x - 1, y];
+            INode down = this[x, y + 1];
+            INode right = this[x + 1, y];
 
-            INode upRight = (this[x + 1, y - 1]);
-            INode upLeft = (this[x - 1, y - 1]);
-            INode downLeft = (this[x - 1, y + 1]);
-            INode downRight = (this[x + 1, y + 1]);
+            INode upRight = this[x + 1, y - 1];
+            INode upLeft = this[x - 1, y - 1];
+            INode downLeft = this[x - 1, y + 1];
+            INode downRight = this[x + 1, y + 1];
             neighbors.AddRange(new List<INode>() { up, left, down, right, upRight, upLeft, downLeft, downRight });
 
             // excepting diagonal nodes between walls
