@@ -19,8 +19,8 @@ namespace PathfindingLib.Tests.CoreTests
 
             List<Position> actualPositions = new List<Position>();
 
-            int expectedWidth = 13;
-            int expectedHeight = 10;
+            int expectedWidth = 6;
+            int expectedHeight = 4;
             List<Position> expectedPositions = new List<Position>();
             for (int y = 0; y < expectedHeight; y++)
             {
@@ -30,22 +30,22 @@ namespace PathfindingLib.Tests.CoreTests
                 }
             }
 
-            SquareGraph graph = new SquareGraph(10, 10, false,
+            SquareGraph graph = new SquareGraph(4, 4, false,
                 nodeType, nodeFactory);
 
 
             // Act
-            graph.AddCols(5, 3);
+            graph.AddCols(2, 2);
 
             // Assert
             Assert.Equal(expectedWidth, graph.Width);
             Assert.Equal(expectedHeight, graph.Height);
 
-            for (int y = 0; y < 10; y++)
+            for (int y = 0; y < graph.Height; y++)
             {
-                for (int x = 0; x < 13; x++)
+                for (int x = 0; x < graph.Width; x++)
                 {
-                    Assert.Equal(expectedPositions[x + y * 10], graph[x, y].Pos);
+                    Assert.True(expectedPositions[x + y * 6] == graph[x, y].Pos);
                 }
             }
         }

@@ -13,6 +13,8 @@ namespace PathfindingLib.Core
         private int _width;
         private int _height;
         private List<INode> _nodes;
+        private INodeType _fillingNodeType;
+        private INodeFactory _nodeFactory;
 
         public int Width => _width;
         public int Height => _height;
@@ -36,6 +38,8 @@ namespace PathfindingLib.Core
             _width = width;
             _height = height;
             _nodes = new List<INode>();
+            _fillingNodeType = fillingType;
+            _nodeFactory = nodeFactory;
             GetNeighborsAllowDiagnalNodes = allowDiagnalNodesForGetNeighborsMethod;
 
             for (int y = 0; y < height; y++)
@@ -60,7 +64,7 @@ namespace PathfindingLib.Core
 
                 try
                 {
-                    INode node = _nodes[y * 10 + x];
+                    INode node = _nodes[y * _width + x];
                     return node;
                 }
                 catch (ArgumentOutOfRangeException)
@@ -180,7 +184,34 @@ namespace PathfindingLib.Core
 
         public void AddCols(int x, int count)
         {
-            throw new NotImplementedException();
+            #region Validation
+            if (x < 0 || x > _width)
+            {
+                throw new ArgumentOutOfRangeException("x", x, "\"x\" must be positive number and less than graph width.");
+            }
+
+            if (count <= 0)
+            {
+                throw new ArgumentOutOfRangeException("count", count, "\"count\" must be greater than zero.");
+            }
+            #endregion
+
+            // Move existing nodes positions
+            _nodes.Where(n => n.Pos.X >= x)
+                .ToList()
+                .ForEach(n => n.Pos = new Position(n.Pos.X + count, n.Pos.Y));
+
+            // Add new cols
+            for (int y = 0; y < _height; y++)
+            {
+                for (int x2 = x; x2 < x + count; x2++)
+                {
+                    _nodes.Add(_nodeFactory.CreateNode(new Position(x2, y), _fillingNodeType));
+                }
+            }
+
+            _width += count;
+            _nodes = _nodes.OrderBy(n => n.Pos, new PositionComparer()).ToList();
         }
 
         public void RemoveCols(int x, int count)
