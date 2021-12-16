@@ -4,13 +4,13 @@ using Priority_Queue;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace PathfindingLib.Pathfinding.Algorithms
 {
     public class AStarSearch : IPFAlgorithm
     {
-        public string AlgorithmName => "AStar";
+        public string Name => "astar";
+        public string DisplayName => "A* search";
 
         public List<Position> FindPath(ISquareGraph graph, INode start, INode goal)
         {

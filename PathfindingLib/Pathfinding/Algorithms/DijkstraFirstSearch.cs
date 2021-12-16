@@ -8,9 +8,10 @@ using Priority_Queue;
 namespace PathfindingLib.Pathfinding.Algorithms
 {
     // Represents Dijkstra searching algorithm
-    public sealed class DijkstraSearch : IPFAlgorithm/*<TNode> where TNode : class, INode*/
+    public sealed class DijkstraFirstSearch : IPFAlgorithm
     {
-        public string AlgorithmName => "Dijkstra algorithm";
+        public string Name => "dfs";
+        public string DisplayName => "Dijkstra first search";
 
         public List<Position> FindPath(ISquareGraph graph, INode start, INode goal)
         {

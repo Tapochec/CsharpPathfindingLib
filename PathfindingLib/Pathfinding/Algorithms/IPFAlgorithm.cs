@@ -9,7 +9,15 @@ namespace PathfindingLib.Pathfinding.Algorithms
     /// </summary>
     public interface IPFAlgorithm/*<TNode> where TNode : class, INode*/
     {
-        string AlgorithmName { get; }
+        /// <summary>
+        /// Unique name, serves as identifier
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
+        /// Algorithm name for display to user
+        /// </summary>
+        string DisplayName { get; }
 
         /// <summary>
         /// Method finds the shortest path in the grid and return list of node positions of the path.

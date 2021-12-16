@@ -9,7 +9,8 @@ namespace PathfindingLib.Pathfinding.Algorithms
     // Represents Breadth First Search algorithm
     public sealed class BreadthFirstSearch : IPFAlgorithm/*<TNode> where TNode : class, INode*/
     {
-        public string AlgorithmName => "Breadth first search algorithm";
+        public string Name => "bfs";
+        public string DisplayName => "Breadth first search";
 
         public List<Position> FindPath(ISquareGraph graph, INode start, INode goal)
         {
