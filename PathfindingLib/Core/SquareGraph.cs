@@ -8,7 +8,7 @@ namespace PathfindingLib.Core
 {
 
     // Represents a directed weighted graph
-    public class SquareGraph/*<TNode>*/ : ISquareGraph//<TNode> where TNode : INode, new()
+    public class SquareGraph : ISquareGraph
     {
         private int _width;
         private int _height;
@@ -165,5 +165,29 @@ namespace PathfindingLib.Core
 
             return neighbors;
         }
+
+        #region Resize methods
+
+        public void AddRows(int y, int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveRows(int y, int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddCols(int x, int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveCols(int x, int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace PathfindingLib.Core
 {
@@ -12,9 +11,10 @@ namespace PathfindingLib.Core
         IEnumerable<INode> GetNeighbors(INode node);
         double GetHeuristicCost(INode from, INode to);
         List<INode> GetAllNodesOfCertainType(string typeName);
-        //void AddLeft(ISquareGraph<TNode> graph);
-        //void AddRight(ISquareGraph<TNode> graph);
-        //void AddTop(ISquareGraph<TNode> graph);
-        //void AddBottom(ISquareGraph<TNode> graph);
+
+        void AddRows(int y, int count);
+        void RemoveRows(int y, int count);
+        void AddCols(int x, int count);
+        void RemoveCols(int x, int count);
     }
 }
