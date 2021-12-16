@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathfindingLib", "PathfindingLib.csproj", "{B2C1FBBD-61B8-4EB9-ADF7-B9A5463B76BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PathfindingLib", "PathfindingLib.csproj", "{B2C1FBBD-61B8-4EB9-ADF7-B9A5463B76BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathfindingLib.Tests", "..\PathfindingLib.Tests\PathfindingLib.Tests.csproj", "{9FD06150-EF1C-4B64-A5F8-EE729140E98E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B2C1FBBD-61B8-4EB9-ADF7-B9A5463B76BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2C1FBBD-61B8-4EB9-ADF7-B9A5463B76BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2C1FBBD-61B8-4EB9-ADF7-B9A5463B76BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FD06150-EF1C-4B64-A5F8-EE729140E98E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FD06150-EF1C-4B64-A5F8-EE729140E98E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FD06150-EF1C-4B64-A5F8-EE729140E98E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FD06150-EF1C-4B64-A5F8-EE729140E98E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
