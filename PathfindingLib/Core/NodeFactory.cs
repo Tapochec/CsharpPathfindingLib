@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PathfindingLib.Core
+﻿namespace PathfindingLib.Core
 {
     public class NodeFactory : INodeFactory
     {
-        public INode CreateNode(Position position, INodeType nodeType)
+        private INodeType _nodeType;
+
+        public NodeFactory(INodeType nodeType)
+        {
+            _nodeType = nodeType;
+        }
+
+        public INode Create(Position position)
+        {
+            return new Node(position, _nodeType) { Value = "0" };
+        }
+
+        public INode Create(Position position, INodeType nodeType)
         {
             return new Node(position, nodeType) { Value = "0" };
         }

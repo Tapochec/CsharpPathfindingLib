@@ -13,7 +13,6 @@ namespace PathfindingLib.Core
         private int _width;
         private int _height;
         private List<INode> _nodes;
-        private INodeType _fillingNodeType;
         private INodeFactory _nodeFactory;
 
         public int Width => _width;
@@ -33,12 +32,11 @@ namespace PathfindingLib.Core
         public delegate IEnumerable<INode> GetNeighborsDelegate(INode node);
         public GetNeighborsDelegate GetNeighbors { get; private set; }
 
-        public SquareGraph(int width, int height, bool allowDiagnalNodesForGetNeighborsMethod, INodeType fillingType, INodeFactory nodeFactory)
+        public SquareGraph(int width, int height, bool allowDiagnalNodesForGetNeighborsMethod, INodeFactory nodeFactory)
         {
             _width = width;
             _height = height;
             _nodes = new List<INode>();
-            _fillingNodeType = fillingType;
             _nodeFactory = nodeFactory;
             GetNeighborsAllowDiagnalNodes = allowDiagnalNodesForGetNeighborsMethod;
 
@@ -46,22 +44,15 @@ namespace PathfindingLib.Core
             {
                 for (int x = 0; x < width; x++)
                 {
-                    //_nodes.Add(new TNode() { Pos = new Position(x, y), Type = fillingType });
-                    _nodes.Add(nodeFactory.CreateNode(new Position(x, y), fillingType));
+                    _nodes.Add(nodeFactory.Create(new Position(x, y)));
                 }
             }
         }
         
         public INode this[int x, int y]
         {
-            //get { return _nodes.Find(n => (n.Pos.X == x) && (n.Pos.Y == y)); }
             get
             {
-                if (x < 0)
-                {
-                    return null;
-                }
-
                 try
                 {
                     INode node = _nodes[y * _width + x];
@@ -187,7 +178,7 @@ namespace PathfindingLib.Core
             #region Validation
             if (x < 0 || x > _width)
             {
-                throw new ArgumentOutOfRangeException("x", x, "\"x\" must be positive number and less than graph width.");
+                throw new ArgumentOutOfRangeException("x", x, "\"x\" must be positive number and lower than graph width.");
             }
 
             if (count <= 0)
@@ -206,7 +197,7 @@ namespace PathfindingLib.Core
             {
                 for (int x2 = x; x2 < x + count; x2++)
                 {
-                    _nodes.Add(_nodeFactory.CreateNode(new Position(x2, y), _fillingNodeType));
+                    _nodes.Add(_nodeFactory.Create(new Position(x2, y)));
                 }
             }
 
@@ -216,7 +207,30 @@ namespace PathfindingLib.Core
 
         public void RemoveCols(int x, int count)
         {
-            throw new NotImplementedException();
+            #region Validation
+            if (x < 0 || x >= _width)
+            {
+                throw new ArgumentOutOfRangeException("x", x, "\"x\" must be positive number and lower than graph width.");
+            }
+
+            if (count <= 0)
+            {
+                throw new ArgumentOutOfRangeException("count", count, "\"count\" must be greater than zero.");
+            }
+
+            if (x + count > _width)
+            {
+                throw new ArgumentOutOfRangeException("count", count, "\"count\" + \"x\" must be lower than graph width.");
+            }
+            #endregion
+
+            _nodes.RemoveAll(n => n.Pos.X >= x && n.Pos.X < x + count);
+
+            _nodes.Where(n => n.Pos.X >= x + count)
+                .ToList()
+                .ForEach(n => n.Pos = new Position(n.Pos.X - count, n.Pos.Y));
+
+            _width -= count;
         }
 
         #endregion
