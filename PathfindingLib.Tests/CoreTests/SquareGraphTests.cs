@@ -65,6 +65,72 @@ namespace PathfindingLib.Tests.CoreTests
         }
 
         [Fact]
+        public void CanAddRows_Middle()
+        {
+            // Arrange
+            int expectedWidth = 4;
+            int expectedHeight = 6;
+            List<Position> expectedPositions = new List<Position>();
+            for (int y = 0; y < expectedHeight; y++)
+            {
+                for (int x = 0; x < expectedWidth; x++)
+                {
+                    expectedPositions.Add(new Position(x, y));
+                }
+            }
+
+            SquareGraph graph = GetSquareGraph(4, 4);
+
+            // Act
+            graph.AddRows(2, 2);
+
+            // Assert
+            Assert.Equal(expectedWidth, graph.Width);
+            Assert.Equal(expectedHeight, graph.Height);
+
+            for (int y = 0; y < graph.Height; y++)
+            {
+                for (int x = 0; x < graph.Width; x++)
+                {
+                    Assert.True(expectedPositions[x + y * expectedWidth] == graph[x, y].Pos);
+                }
+            }
+        }
+
+        [Fact]
+        public void CanAddRows_End()
+        {
+            // Arrange
+            int expectedWidth = 4;
+            int expectedHeight = 6;
+            List<Position> expectedPositions = new List<Position>();
+            for (int y = 0; y < expectedHeight; y++)
+            {
+                for (int x = 0; x < expectedWidth; x++)
+                {
+                    expectedPositions.Add(new Position(x, y));
+                }
+            }
+
+            SquareGraph graph = GetSquareGraph(4, 4);
+
+            // Act
+            graph.AddRows(4, 2);
+
+            // Assert
+            Assert.Equal(expectedWidth, graph.Width);
+            Assert.Equal(expectedHeight, graph.Height);
+
+            for (int y = 0; y < graph.Height; y++)
+            {
+                for (int x = 0; x < graph.Width; x++)
+                {
+                    Assert.True(expectedPositions[x + y * expectedWidth] == graph[x, y].Pos);
+                }
+            }
+        }
+
+        [Fact]
         public void CanRemoveRows()
         {
             // Arrange

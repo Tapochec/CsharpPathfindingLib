@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 
 namespace PathfindingLib.Core
 {
-
-    // Represents a directed weighted graph
+    /// <summary>
+    /// Represents a directed weighted graph
+    /// </summary>
     public class SquareGraph : ISquareGraph
     {
         private int _width;
@@ -40,13 +39,7 @@ namespace PathfindingLib.Core
             _nodeFactory = nodeFactory;
             GetNeighborsAllowDiagnalNodes = allowDiagnalNodesForGetNeighborsMethod;
 
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    _nodes.Add(nodeFactory.Create(new Position(x, y)));
-                }
-            }
+            Fill();
         }
         
         public INode this[int x, int y]
@@ -80,88 +73,27 @@ namespace PathfindingLib.Core
             return _nodes.FindAll(n => n.Type.Name == typeName);
         }
 
-        private IEnumerable<INode> GetFourNeighbors(INode node)
-        {
-            int x = node.Pos.X;
-            int y = node.Pos.Y;
-            List<INode> neighbors = new List<INode>();
-
-            // Смена хода часовой стрелки в зависимости от чётности стрелки
-            if ((x + y) % 2 == 0)
-            {
-                neighbors.Add(this[x, y - 1]); // up
-                neighbors.Add(this[x - 1, y]); // left
-                neighbors.Add(this[x, y + 1]); // down
-                neighbors.Add(this[x + 1, y]); // right
-            }
-            else
-            {
-                neighbors.Add(this[x + 1, y]); // right
-                neighbors.Add(this[x, y + 1]); // down
-                neighbors.Add(this[x - 1, y]); // left
-                neighbors.Add(this[x, y - 1]); // up
-            }
-
-            neighbors.RemoveAll(n => n == null);
-            neighbors.RemoveAll(n => n.IsPassable == false); // Исключаем стены
-
-            return neighbors;
-        }
-
-        private IEnumerable<INode> GetEightNeighbors(INode node)
-        {
-            int x = node.Pos.X;
-            int y = node.Pos.Y;
-            List<INode> neighbors = new List<INode>();
-
-            INode up = this[x, y - 1];
-            INode left = this[x - 1, y];
-            INode down = this[x, y + 1];
-            INode right = this[x + 1, y];
-
-            INode upRight = this[x + 1, y - 1];
-            INode upLeft = this[x - 1, y - 1];
-            INode downLeft = this[x - 1, y + 1];
-            INode downRight = this[x + 1, y + 1];
-            neighbors.AddRange(new List<INode>() { up, left, down, right, upRight, upLeft, downLeft, downRight });
-
-            // excepting diagonal nodes between walls
-            if (left != null && up != null)
-            {
-                if (!left.IsPassable && !up.IsPassable)
-                {
-                    neighbors.Remove(upLeft);
-                }
-            }
-            if (up != null && right != null)
-            {
-                if (!up.IsPassable && !right.IsPassable)
-                {
-                    neighbors.Remove(upRight);
-                }
-            }
-            if (right != null && down != null)
-            {
-                if (!right.IsPassable && !down.IsPassable)
-                {
-                    neighbors.Remove(downRight);
-                }
-            }
-            if (down != null && left != null)
-            {
-                if (!down.IsPassable && !left.IsPassable)
-                {
-                    neighbors.Remove(downLeft);
-                }
-            }
-
-            neighbors.RemoveAll(n => n == null);
-            neighbors.RemoveAll(n => n.IsPassable == false); // except walls
-
-            return neighbors;
-        }
-
         #region Resize methods
+
+        public void Resize(int newWidth, int newHeight)
+        {
+            #region Validation
+            if (newWidth <= 0)
+            {
+                throw new ArgumentException("new width must be positive number, that lower than allowed max width");
+            }
+
+            if (newHeight <= 0)
+            {
+                throw new ArgumentException("new height must be positive number, that lower than allowed max height");
+            }
+            #endregion
+
+            _width = newWidth;
+            _height = newHeight;
+
+            Fill();
+        }
 
         public void AddRows(int y, int count)
         {
@@ -178,7 +110,7 @@ namespace PathfindingLib.Core
             #endregion
 
             // Move existing nodes positions
-            _nodes.Where(n => n.Pos.X >= y)
+            _nodes.Where(n => n.Pos.Y >= y)
                 .ToList()
                 .ForEach(n => n.Pos = new Position(n.Pos.X, n.Pos.Y + count));
 
@@ -281,6 +213,106 @@ namespace PathfindingLib.Core
                 .ForEach(n => n.Pos = new Position(n.Pos.X - count, n.Pos.Y));
 
             _width -= count;
+        }
+
+        #endregion
+
+        #region Private methods
+
+        // creates list of nodes using node factory
+        // deletes old, if exists
+        private void Fill()
+        {
+            _nodes.Clear();
+
+            for (int y = 0; y < _height; y++)
+            {
+                for (int x = 0; x < _width; x++)
+                {
+                    _nodes.Add(_nodeFactory.Create(new Position(x, y)));
+                }
+            }
+        }
+
+        private IEnumerable<INode> GetFourNeighbors(INode node)
+        {
+            int x = node.Pos.X;
+            int y = node.Pos.Y;
+            List<INode> neighbors = new List<INode>();
+
+            // Смена хода часовой стрелки в зависимости от чётности стрелки
+            if ((x + y) % 2 == 0)
+            {
+                neighbors.Add(this[x, y - 1]); // up
+                neighbors.Add(this[x - 1, y]); // left
+                neighbors.Add(this[x, y + 1]); // down
+                neighbors.Add(this[x + 1, y]); // right
+            }
+            else
+            {
+                neighbors.Add(this[x + 1, y]); // right
+                neighbors.Add(this[x, y + 1]); // down
+                neighbors.Add(this[x - 1, y]); // left
+                neighbors.Add(this[x, y - 1]); // up
+            }
+
+            neighbors.RemoveAll(n => n == null);
+            neighbors.RemoveAll(n => n.IsPassable == false); // Исключаем стены
+
+            return neighbors;
+        }
+
+        private IEnumerable<INode> GetEightNeighbors(INode node)
+        {
+            int x = node.Pos.X;
+            int y = node.Pos.Y;
+            List<INode> neighbors = new List<INode>();
+
+            INode up = this[x, y - 1];
+            INode left = this[x - 1, y];
+            INode down = this[x, y + 1];
+            INode right = this[x + 1, y];
+
+            INode upRight = this[x + 1, y - 1];
+            INode upLeft = this[x - 1, y - 1];
+            INode downLeft = this[x - 1, y + 1];
+            INode downRight = this[x + 1, y + 1];
+            neighbors.AddRange(new List<INode>() { up, left, down, right, upRight, upLeft, downLeft, downRight });
+
+            // excepting diagonal nodes between walls
+            if (left != null && up != null)
+            {
+                if (!left.IsPassable && !up.IsPassable)
+                {
+                    neighbors.Remove(upLeft);
+                }
+            }
+            if (up != null && right != null)
+            {
+                if (!up.IsPassable && !right.IsPassable)
+                {
+                    neighbors.Remove(upRight);
+                }
+            }
+            if (right != null && down != null)
+            {
+                if (!right.IsPassable && !down.IsPassable)
+                {
+                    neighbors.Remove(downRight);
+                }
+            }
+            if (down != null && left != null)
+            {
+                if (!down.IsPassable && !left.IsPassable)
+                {
+                    neighbors.Remove(downLeft);
+                }
+            }
+
+            neighbors.RemoveAll(n => n == null);
+            neighbors.RemoveAll(n => n.IsPassable == false); // except walls
+
+            return neighbors;
         }
 
         #endregion

@@ -12,8 +12,19 @@ namespace PathfindingLib.Core
         double GetHeuristicCost(INode from, INode to);
         List<INode> GetAllNodesOfCertainType(string typeName);
 
+        /// <summary>
+        /// Change actual graph size
+        /// </summary>
+        /// <param name="newWidth"></param>
+        /// <param name="newHeight"></param>
+        void Resize(int newWidth, int newHeight);
+
+        /// <summary>
+        /// Add new rows after y position
+        /// </summary>
+        /// <param name="y">positive y position</param>
+        /// <param name="count">count of new rows to add</param>
         void AddRows(int y, int count);
-        void RemoveRows(int y, int count);
 
         /// <summary>
         /// Add new columns after x position
@@ -21,6 +32,19 @@ namespace PathfindingLib.Core
         /// <param name="x">positive x position</param>
         /// <param name="count">count of new columns to add</param>
         void AddCols(int x, int count);
+        
+        /// <summary>
+        /// Remove rows
+        /// </summary>
+        /// <param name="y">positive y position</param>
+        /// <param name="count">count of rows to delete</param>
+        void RemoveRows(int y, int count);
+
+        /// <summary>
+        /// Remove cols
+        /// </summary>
+        /// <param name="x">positive x position</param>
+        /// <param name="count">count of cols to delete</param>
         void RemoveCols(int x, int count);
     }
 }
