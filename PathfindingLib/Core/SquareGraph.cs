@@ -165,12 +165,34 @@ namespace PathfindingLib.Core
 
         public void AddRows(int y, int count)
         {
-            throw new NotImplementedException();
-        }
+            #region Validation
+            if (y < 0 || y > _height)
+            {
+                throw new ArgumentOutOfRangeException("y", y, "\"y\" must be positive number and lower than graph height.");
+            }
 
-        public void RemoveRows(int y, int count)
-        {
-            throw new NotImplementedException();
+            if (count <= 0)
+            {
+                throw new ArgumentOutOfRangeException("count", count, "\"count\" must be greater than zero.");
+            }
+            #endregion
+
+            // Move existing nodes positions
+            _nodes.Where(n => n.Pos.X >= y)
+                .ToList()
+                .ForEach(n => n.Pos = new Position(n.Pos.X, n.Pos.Y + count));
+
+            // Add new rows
+            for (int y2 = y; y2 < y + count; y2++)
+            {
+                for (int x = 0; x < _width; x++)
+                {
+                    _nodes.Add(_nodeFactory.Create(new Position(x, y2)));
+                }
+            }
+
+            _height += count;
+            _nodes = _nodes.OrderBy(n => n.Pos, new PositionComparer(_width)).ToList();
         }
 
         public void AddCols(int x, int count)
@@ -202,7 +224,35 @@ namespace PathfindingLib.Core
             }
 
             _width += count;
-            _nodes = _nodes.OrderBy(n => n.Pos, new PositionComparer()).ToList();
+            _nodes = _nodes.OrderBy(n => n.Pos, new PositionComparer(_width)).ToList();
+        }
+
+        public void RemoveRows(int y, int count)
+        {
+            #region Validation
+            if (y < 0 || y >= _height)
+            {
+                throw new ArgumentOutOfRangeException("y", y, "\"y\" must be positive number and lower than graph height.");
+            }
+
+            if (count <= 0)
+            {
+                throw new ArgumentOutOfRangeException("count", count, "\"count\" must be greater than zero.");
+            }
+
+            if (y + count > _height)
+            {
+                throw new ArgumentOutOfRangeException("count", count, "\"count\" + \"y\" must be lower than graph height.");
+            }
+            #endregion
+
+            _nodes.RemoveAll(n => n.Pos.Y >= y && n.Pos.Y < y + count);
+
+            _nodes.Where(n => n.Pos.Y >= y + count)
+                .ToList()
+                .ForEach(n => n.Pos = new Position(n.Pos.X, n.Pos.Y - count));
+
+            _height -= count;
         }
 
         public void RemoveCols(int x, int count)

@@ -29,10 +29,113 @@ namespace PathfindingLib.Tests.CoreTests
             Assert.True(graph[3, 3].Pos == new Position(3, 3));
         }
 
+        #region Add\Remove rows
+
+        [Fact]
+        public void CanAddRows_Beginning()
+        {
+            // Arrange
+            int expectedWidth = 4;
+            int expectedHeight = 6;
+            List<Position> expectedPositions = new List<Position>();
+            for (int y = 0; y < expectedHeight; y++)
+            {
+                for (int x = 0; x < expectedWidth; x++)
+                {
+                    expectedPositions.Add(new Position(x, y));
+                }
+            }
+
+            SquareGraph graph = GetSquareGraph(4, 4);
+
+            // Act
+            graph.AddRows(0, 2);
+
+            // Assert
+            Assert.Equal(expectedWidth, graph.Width);
+            Assert.Equal(expectedHeight, graph.Height);
+
+            for (int y = 0; y < graph.Height; y++)
+            {
+                for (int x = 0; x < graph.Width; x++)
+                {
+                    Assert.True(expectedPositions[x + y * expectedWidth] == graph[x, y].Pos);
+                }
+            }
+        }
+
+        [Fact]
+        public void CanRemoveRows()
+        {
+            // Arrange
+            int expectedWidth = 6;
+            int expectedHeight = 4;
+            List<Position> expectedPositions = new List<Position>();
+            for (int y = 0; y < expectedHeight; y++)
+            {
+                for (int x = 0; x < expectedWidth; x++)
+                {
+                    expectedPositions.Add(new Position(x, y));
+                }
+            }
+
+            SquareGraph graph = GetSquareGraph(6, 6);
+
+            // Act
+            graph.RemoveRows(2, 2);
+
+            // Assert
+            Assert.Equal(expectedWidth, graph.Width);
+            Assert.Equal(expectedHeight, graph.Height);
+
+            for (int y = 0; y < graph.Height; y++)
+            {
+                for (int x = 0; x < graph.Width; x++)
+                {
+                    Assert.True(expectedPositions[x + y * expectedWidth] == graph[x, y].Pos);
+                }
+            }
+        }
+
+        #endregion
+
         #region Add\Remove cols
 
         [Fact]
-        public void CanAddCols()
+        public void CanAddCols_Beginning()
+        {
+            // Arrange
+            int expectedWidth = 6;
+            int expectedHeight = 4;
+            List<Position> expectedPositions = new List<Position>();
+            for (int y = 0; y < expectedHeight; y++)
+            {
+                for (int x = 0; x < expectedWidth; x++)
+                {
+                    expectedPositions.Add(new Position(x, y));
+                }
+            }
+
+            SquareGraph graph = GetSquareGraph(4, 4);
+
+            // Act
+            graph.AddCols(0, 2);
+
+            // Assert
+            Assert.Equal(expectedWidth, graph.Width);
+            Assert.Equal(expectedHeight, graph.Height);
+
+            for (int y = 0; y < graph.Height; y++)
+            {
+                for (int x = 0; x < graph.Width; x++)
+                {
+                    Assert.True(expectedPositions[x + y * expectedWidth] == graph[x, y].Pos);
+                }
+            }
+        }
+
+        [Fact]
+        public void CanAddCols_Middle()
         {
             // Arrange
             int expectedWidth = 6;
@@ -50,6 +153,39 @@ namespace PathfindingLib.Tests.CoreTests
 
             // Act
             graph.AddCols(2, 2);
+
+            // Assert
+            Assert.Equal(expectedWidth, graph.Width);
+            Assert.Equal(expectedHeight, graph.Height);
+
+            for (int y = 0; y < graph.Height; y++)
+            {
+                for (int x = 0; x < graph.Width; x++)
+                {
+                    Assert.True(expectedPositions[x + y * expectedWidth] == graph[x, y].Pos);
+                }
+            }
+        }
+
+        [Fact]
+        public void CanAddCols_End()
+        {
+            // Arrange
+            int expectedWidth = 6;
+            int expectedHeight = 4;
+            List<Position> expectedPositions = new List<Position>();
+            for (int y = 0; y < expectedHeight; y++)
+            {
+                for (int x = 0; x < expectedWidth; x++)
+                {
+                    expectedPositions.Add(new Position(x, y));
+                }
+            }
+
+            SquareGraph graph = GetSquareGraph(4, 4);
+
+            // Act
+            graph.AddCols(4, 2);
 
             // Assert
             Assert.Equal(expectedWidth, graph.Width);
