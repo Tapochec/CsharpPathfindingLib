@@ -14,6 +14,11 @@ namespace PathfindingLib.Core
         private List<INode> _nodes;
         private INodeFactory _nodeFactory;
 
+        /// <summary> Maximum available width </summary>
+        public const int MaxWidth = 10000;
+        /// <summary> Maximum available height </summary>
+        public const int MaxHeight = 10000;
+
         public int Width => _width;
         public int Height => _height;
         public List<INode> Nodes => _nodes;
@@ -31,8 +36,27 @@ namespace PathfindingLib.Core
         public delegate IEnumerable<INode> GetNeighborsDelegate(INode node);
         public GetNeighborsDelegate GetNeighbors { get; private set; }
 
+        /// <summary>
+        /// Creates new square graph
+        /// </summary>
+        /// <param name="width">graph width</param>
+        /// <param name="height">graph height</param>
+        /// <param name="allowDiagnalNodesForGetNeighborsMethod">true for allow</param>
+        /// <param name="nodeFactory">node factory for creating new nodes in graph</param>
         public SquareGraph(int width, int height, bool allowDiagnalNodesForGetNeighborsMethod, INodeFactory nodeFactory)
         {
+            #region Validation
+            if (width <= 0 || width > MaxWidth)
+            {
+                throw new ArgumentException("new width must be positive number, that lower than allowed max width");
+            }
+
+            if (height <= 0 || height > MaxHeight)
+            {
+                throw new ArgumentException("new height must be positive number, that lower than allowed max height");
+            }
+            #endregion
+
             _width = width;
             _height = height;
             _nodes = new List<INode>();
@@ -78,12 +102,12 @@ namespace PathfindingLib.Core
         public void Resize(int newWidth, int newHeight)
         {
             #region Validation
-            if (newWidth <= 0)
+            if (newWidth <= 0 || newWidth > MaxWidth)
             {
                 throw new ArgumentException("new width must be positive number, that lower than allowed max width");
             }
 
-            if (newHeight <= 0)
+            if (newHeight <= 0 || newHeight > MaxHeight )
             {
                 throw new ArgumentException("new height must be positive number, that lower than allowed max height");
             }
@@ -106,6 +130,11 @@ namespace PathfindingLib.Core
             if (count <= 0)
             {
                 throw new ArgumentOutOfRangeException("count", count, "\"count\" must be greater than zero.");
+            }
+
+            if (y + count + _height > MaxHeight)
+            {
+                throw new ArgumentOutOfRangeException("you can't add more rows, that graph allows");
             }
             #endregion
 
@@ -138,6 +167,11 @@ namespace PathfindingLib.Core
             if (count <= 0)
             {
                 throw new ArgumentOutOfRangeException("count", count, "\"count\" must be greater than zero.");
+            }
+
+            if (x + count + _width > MaxWidth)
+            {
+                throw new ArgumentOutOfRangeException("you can't add more cols, that graph allows");
             }
             #endregion
 
