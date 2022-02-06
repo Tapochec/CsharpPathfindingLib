@@ -29,6 +29,26 @@ namespace PathfindingLib.Tests.CoreTests
             Assert.True(graph[3, 3].Pos == new Position(3, 3));
         }
 
+        [Fact]
+        public void CheckMatrixIndexing()
+        {
+            SquareGraph graph = GetSquareGraph(5, 5);
+
+            for (int i = 0; i < graph.Height; i++)
+            {
+                for (int j = 0; j < graph.Width; j++)
+                {
+                    if (graph[j, i].Pos != new Position(j, i))
+                    {
+                        Assert.True(false);
+                        return;
+                    }
+                }
+            }
+
+            Assert.True(true);
+        }
+
         #region Add\Remove rows
 
         [Fact]
