@@ -70,15 +70,7 @@ namespace PathfindingLib.Core
         {
             get
             {
-                try
-                {
-                    INode node = _nodes[y * _width + x];
-                    return node;
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                    return null;
-                }
+                return _nodes.Find(n => (n.Pos.X == x) && (n.Pos.Y == y));
             }
         }
 
