@@ -60,16 +60,16 @@ namespace PathfindingLib.Pathfinding.Algorithms
                 // Adding info about current step
                 PFHistoryItem step = new PFHistoryItem(
                     current,
-                    cameFrom as Dictionary<INode, INode>,
-                    frontier.ToList() as List<INode>);
+                    cameFrom.ToDictionary(entry => entry.Key, entry => entry.Value),
+                    frontier.ToList());
 
                 steps.Add(step);
             }
 
             PFHistoryItem lastStep = new PFHistoryItem(
                 goal,
-                cameFrom as Dictionary<INode, INode>,
-                frontier.ToList() as List<INode>);
+                cameFrom.ToDictionary(entry => entry.Key, entry => entry.Value),
+                frontier.ToList());
 
             steps.Add(lastStep);
 
