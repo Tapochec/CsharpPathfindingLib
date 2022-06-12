@@ -7,14 +7,7 @@
         {
             get
             {
-                if (UseCustomCost)
-                {
-                    return _customCost;
-                }
-                else
-                {
-                    return NodeType?.NodeCost;
-                }
+                return UseCustomCost ? _customCost : _nodeType?.NodeCost;
             }
             set
             {
