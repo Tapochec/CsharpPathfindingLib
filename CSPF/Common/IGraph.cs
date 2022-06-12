@@ -9,10 +9,10 @@ namespace CSPF.Common
 {
     public interface IGraph<TPosition>
     {
-        int ActualWidth { get; }
-        int ActualHeight { get; }
-        int CanvasWidth { get; }
-        int CanvasHeight { get; }
+        uint ActualWidth { get; }
+        uint ActualHeight { get; }
+        uint CanvasWidth { get; }
+        uint CanvasHeight { get; }
 
         void AddNodes(params TPosition[] positions);
         void RemoveNodes(params TPosition[] positions);
