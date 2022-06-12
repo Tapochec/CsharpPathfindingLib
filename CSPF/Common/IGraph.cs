@@ -4,8 +4,6 @@
     {
         uint ActualWidth { get; }
         uint ActualHeight { get; }
-        uint CanvasWidth { get; }
-        uint CanvasHeight { get; }
 
         void AddNodes(params TPosition[] positions);
         void RemoveNodes(params TPosition[] positions);
