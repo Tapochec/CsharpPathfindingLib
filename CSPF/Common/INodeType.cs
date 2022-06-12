@@ -2,6 +2,9 @@
 {
     public interface INodeType
     {
+        /// <summary>
+        /// Unique node type identifier
+        /// </summary>
         string Name { get; set; }
 
         double? NodeCost { get; set; }
