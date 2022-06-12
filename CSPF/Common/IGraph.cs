@@ -9,8 +9,9 @@
         /// Creates new nodes with corresponding positions.
         /// </summary>
         /// <param name="nodeType">The type of all new nodes</param>
-        void AddNodes(INodeType nodeType, params TPosition[] positions);
-        void RemoveNodes(params TPosition[] positions);
+        void AddNode(INode node, TPosition position);
+        void RemoveNode(INode node);
+        void RemoveNodeAt(TPosition position);
         void Clear(bool resetCanvasSize = true);
         IReadOnlyList<INode> GetNeighbors(INode node, bool includeNullCostNodes = true);
     }
