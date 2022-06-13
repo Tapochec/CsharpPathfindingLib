@@ -1,6 +1,6 @@
 ﻿namespace CSPF.Common
 {
-    public enum EdgeType
+    public enum EdgeDir
     {
         OneWayToB,
         OneWayToA,

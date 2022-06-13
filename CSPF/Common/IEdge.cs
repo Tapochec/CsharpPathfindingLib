@@ -4,6 +4,6 @@
     {
         INode NodeA { get; set; }
         INode NodeB { get; set; }
-        EdgeType Type { get; set; }
+        EdgeDir Type { get; set; }
     }
 }
