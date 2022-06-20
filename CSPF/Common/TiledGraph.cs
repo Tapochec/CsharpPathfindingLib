@@ -24,6 +24,7 @@ namespace CSPF.Common
 
         public TiledGraph() { }
 
+        public INode this[Point position] => (_nodes as IReadOnlyDictionary<Point, INode>)[position];
 
         public void AddNode(INode node, Point position)
         {
